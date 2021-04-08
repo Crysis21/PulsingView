@@ -1,0 +1,3 @@
+include ':pulseview'
+include ':app'
+rootProject.name = "PulseView"

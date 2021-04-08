@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PulsingAnimationView">
+        <attr name="baseRadius" format="dimension" />
+        <attr name="waveDistance" format="dimension" />
+        <attr name="pulseColor" format="color"/>
+        <attr name="autoplay" format="boolean"/>
+    </declare-styleable>
+</resources>

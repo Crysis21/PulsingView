@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="?appBackground"
+    android:layout_height="match_parent">
+
+    <ro.holdone.pulseview.PulsingAnimationView
+        android:id="@+id/pulsingAnimationView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:autoplay="true"
+        app:baseRadius="0dp"
+        app:pulseColor="?colorPulse"
+        app:waveDistance="10dp" />
+
+
+    <ro.holdone.pulseview.PulsingAnimationView
+        android:id="@+id/button_companion"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:autoplay="true"
+        app:baseRadius="32dp"
+        app:layout_constraintBottom_toBottomOf="@id/floating_button"
+        app:layout_constraintEnd_toEndOf="@id/floating_button"
+        app:layout_constraintStart_toStartOf="@id/floating_button"
+        app:layout_constraintTop_toTopOf="@id/floating_button"
+        app:pulseColor="@color/orange"
+        app:waveDistance="10dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button"
+        app:backgroundTint="@color/orange"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="32dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
