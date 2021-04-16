@@ -1,7 +1,38 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'maven-publish'
+    id 'signing'
 }
+
+ext {
+
+    PUBLISH_GROUP_ID = 'ro.holdone'
+    PUBLISH_ARTIFACT_ID = 'pulseview'
+    PUBLISH_VERSION = "1.0.0"
+
+    POM_NAME = 'pulseview'
+    POM_PACKAGING = 'aar'
+
+    POM_DESCRIPTION = 'Circles ripple effect'
+    POM_INCEPTION_YEAR = '2021'
+
+    POM_URL = 'https://github.com/Crysis21/PulsingView'
+    POM_SCM_URL = 'https://github.com/Crysis21/PulsingView'
+    POM_SCM_CONNECTION = 'scm:git@github.com:Crysis21/PulsingView.git'
+    POM_SCM_DEV_CONNECTION = 'scm:git@github.com:Crysis21/PulsingView.git'
+
+    POM_LICENCE_NAME = 'The Apache Software License, Version 2.0'
+    POM_LICENCE_URL = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    POM_LICENCE_DIST = 'repo'
+
+    POM_DEVELOPER_ID = 'Crysis21'
+    POM_DEVELOPER_NAME = 'Cristian Holdunu'
+    POM_DEVELOPER_URL = 'https://holdone.ro'
+    POM_DEVELOPER_EMAIL = "cristian.holdunu@gmail.com"
+}
+
+apply from: "${rootProject.projectDir}/scripts/gradle-publishing.gradle"
 
 android {
     compileSdkVersion 30
