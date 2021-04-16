@@ -17,9 +17,10 @@
 
     <ro.holdone.pulseview.PulsingAnimationView
         android:id="@+id/button_companion"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         app:autoplay="true"
+        app:strokeWidth="2.0dp"
         app:baseRadius="32dp"
         app:layout_constraintBottom_toBottomOf="@id/floating_button"
         app:layout_constraintEnd_toEndOf="@id/floating_button"

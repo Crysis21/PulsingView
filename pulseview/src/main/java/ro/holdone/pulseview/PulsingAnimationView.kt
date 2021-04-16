@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import com.holdone.pulseview.R
@@ -33,10 +34,16 @@ class PulsingAnimationView @JvmOverloads constructor(
 
     var startRadius: Float? = null
     var startRadiusPercent: Float = 0.14F
+    var strokeWidth: Float = 1.0F
+        set(value) {
+            field = value
+            drawPaint.strokeWidth = value
+        }
 
     var waveDistance: Float? = null
     var waveDistancePercent: Float = 0.03F
     var autoplay: Boolean = false
+    var duration = 1000
 
     //Computed properties. Don't use
     private var baseRadius: Float = 0.0F
@@ -52,6 +59,13 @@ class PulsingAnimationView @JvmOverloads constructor(
             .toFloat()
         waveDistance = array.getDimensionPixelSize(R.styleable.PulsingAnimationView_waveDistance, 0)
             .toFloat()
+        strokeWidth = array.getDimensionPixelSize(
+            R.styleable.PulsingAnimationView_strokeWidth, 1)
+            .toFloat()
+        duration = array.getInteger(
+            R.styleable.PulsingAnimationView_duration, 1000)
+
+        drawPaint.strokeWidth = strokeWidth
         color = array.getColor(R.styleable.PulsingAnimationView_pulseColor, color)
         autoplay = array.getBoolean(R.styleable.PulsingAnimationView_autoplay, false)
         array.recycle()
@@ -76,7 +90,7 @@ class PulsingAnimationView @JvmOverloads constructor(
         center = PointF(w.toFloat() / 2, h.toFloat() / 2)
         maxRadius = center.distance(PointF(w.toFloat() / 2, 0.0f))
 
-        numberOfWaves = ((maxRadius - baseRadius) / baseWaveDistance).toInt()
+        numberOfWaves = ((maxRadius - baseRadius) / baseWaveDistance).toInt() + 1
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -85,8 +99,8 @@ class PulsingAnimationView @JvmOverloads constructor(
         canvas?.drawCircle(width.toFloat() / 2, height.toFloat() / 2, baseRadius, drawPaint)
 
         repeat(numberOfWaves) {
-            val nextRadius = baseRadius + it * baseWaveDistance + currentDrawDistance
-            val alpha = 1f - nextRadius / maxRadius
+            val nextRadius = baseRadius + currentDrawDistance + strokeWidth + it * baseWaveDistance - strokeWidth
+            val alpha = 1f - min((nextRadius) / maxRadius, 1.0F)
             drawPaint.alpha = (alpha * 255).toInt()
             canvas?.drawCircle(width.toFloat() / 2, height.toFloat() / 2, nextRadius, drawPaint)
         }
@@ -96,7 +110,7 @@ class PulsingAnimationView @JvmOverloads constructor(
     fun startAnimation() {
         val wave1Animator = ValueAnimator.ofFloat(0F, 1F)
         wave1Animator.repeatCount = ValueAnimator.INFINITE
-        wave1Animator.duration = 1000
+        wave1Animator.duration = duration.toLong()
         wave1Animator.repeatMode = ValueAnimator.RESTART
         wave1Animator.interpolator = LinearInterpolator()
         wave1Animator.addUpdateListener {
