@@ -48,3 +48,5 @@ You can change the following params:
 This params can be changed in XML or programatically.
 
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/777169/114056287-2ea6c900-989a-11eb-9b80-59b6b510d66b.gif)
+![GIF-210416_202658](https://user-images.githubusercontent.com/777169/115061817-4dd4d480-9ef2-11eb-9f0e-7f9c4ea9e061.gif)
+
