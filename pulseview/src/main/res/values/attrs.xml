@@ -3,9 +3,16 @@
     <declare-styleable name="PulsingAnimationView">
         <attr name="baseRadius" format="dimension" />
         <attr name="waveDistance" format="dimension" />
-        <attr name="pulseColor" format="color"/>
-        <attr name="autoplay" format="boolean"/>
-        <attr name="strokeWidth" format="dimension"/>
-        <attr name="duration" format="integer"/>
+        <attr name="pulseColor" format="color" />
+        <attr name="autoplay" format="boolean" />
+        <attr name="strokeWidth" format="dimension" />
+        <attr name="duration" format="integer" />
+        <attr name="pulseStyle" />
+        <attr name="fillInnerCircle" format="boolean"/>
     </declare-styleable>
+
+    <attr name="pulseStyle" format="enum">
+        <enum name="stroke" value="0" />
+        <enum name="fill" value="1" />
+    </attr>
 </resources>

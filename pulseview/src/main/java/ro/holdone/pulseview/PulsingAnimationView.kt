@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
+import androidx.core.animation.doOnRepeat
 import com.holdone.pulseview.R
 import kotlin.math.min
 import kotlin.math.pow
@@ -18,6 +19,16 @@ import kotlin.math.sqrt
 class PulsingAnimationView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
+
+    enum class Style(val value: Int) {
+        stroke(0),
+        fill(1);
+
+        companion object {
+            private val VALUES = values()
+            fun getByValue(value: Int) = VALUES.firstOrNull { it.value == value }
+        }
+    }
 
     private val drawPaint = Paint().apply {
         this.isAntiAlias = true
@@ -40,6 +51,12 @@ class PulsingAnimationView @JvmOverloads constructor(
             drawPaint.strokeWidth = value
         }
 
+    var style: Style = Style.stroke
+        set(value) {
+            field = value
+            drawPaint.style = if (value == Style.stroke) Paint.Style.STROKE else Paint.Style.FILL
+        }
+    var fillInnerCircle = false
     var waveDistance: Float? = null
     var waveDistancePercent: Float = 0.03F
     var autoplay: Boolean = false
@@ -60,10 +77,16 @@ class PulsingAnimationView @JvmOverloads constructor(
         waveDistance = array.getDimensionPixelSize(R.styleable.PulsingAnimationView_waveDistance, 0)
             .toFloat()
         strokeWidth = array.getDimensionPixelSize(
-            R.styleable.PulsingAnimationView_strokeWidth, 1)
+            R.styleable.PulsingAnimationView_strokeWidth, 1
+        )
             .toFloat()
         duration = array.getInteger(
-            R.styleable.PulsingAnimationView_duration, 1000)
+            R.styleable.PulsingAnimationView_duration, 1000
+        )
+        Style.getByValue(array.getInt(R.styleable.PulsingAnimationView_pulseStyle, 0))?.let {
+            style = it
+        }
+        fillInnerCircle = array.getBoolean(R.styleable.PulsingAnimationView_fillInnerCircle, false)
 
         drawPaint.strokeWidth = strokeWidth
         color = array.getColor(R.styleable.PulsingAnimationView_pulseColor, color)
@@ -96,10 +119,15 @@ class PulsingAnimationView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         drawPaint.alpha = 255
-        canvas?.drawCircle(width.toFloat() / 2, height.toFloat() / 2, baseRadius, drawPaint)
+        if (fillInnerCircle) {
+            drawPaint.style = Paint.Style.FILL
+            canvas?.drawCircle(width.toFloat() / 2, height.toFloat() / 2, baseRadius, drawPaint)
+            drawPaint.style = Paint.Style.STROKE
+        }
 
         repeat(numberOfWaves) {
-            val nextRadius = baseRadius + currentDrawDistance + strokeWidth + it * baseWaveDistance - strokeWidth
+            var nextRadius =
+                baseRadius + currentDrawDistance + strokeWidth + it * baseWaveDistance - strokeWidth
             val alpha = 1f - min((nextRadius) / maxRadius, 1.0F)
             drawPaint.alpha = (alpha * 255).toInt()
             canvas?.drawCircle(width.toFloat() / 2, height.toFloat() / 2, nextRadius, drawPaint)
@@ -107,7 +135,7 @@ class PulsingAnimationView @JvmOverloads constructor(
     }
 
 
-    fun startAnimation() {
+    private fun startAnimation() {
         val wave1Animator = ValueAnimator.ofFloat(0F, 1F)
         wave1Animator.repeatCount = ValueAnimator.INFINITE
         wave1Animator.duration = duration.toLong()
@@ -120,11 +148,4 @@ class PulsingAnimationView @JvmOverloads constructor(
 
         wave1Animator.start()
     }
-
-}
-
-fun PointF.distance(point: PointF): Float {
-    return sqrt(
-        (this.x - point.x).toDouble().pow(2.0) + (this.y - point.y).toDouble().pow(2.0)
-    ).toFloat()
 }
